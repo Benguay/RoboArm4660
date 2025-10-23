@@ -42,17 +42,18 @@ fprintf('End-Effector Position (x,y,z) in m: [%.4f, %.4f, %.4f]\n', position_xyz
 disp('Trajectory Planning...');
 
 %sphere params in meters
-sphere_center = [0.45; 0.0; 0.5];
+sphere_center = [-0.6; -0.4; 0.8];
 sphere_radius = 0.15;
 
 %circle params 
-circle_normal = [1; 1; 1];
+circle_normal = [1; 1; 0.45];
 circle_normal = circle_normal / norm(circle_normal);
+circle_radius = 0.04;
 
-plane_offset = sphere_radius * 0.5;
+plane_offset = sqrt(sphere_radius^2 - circle_radius^2);%sphere_radius * 0.5;
 
 %calculations
-circle_radius = sqrt(sphere_radius^2 - plane_offset^2);
+
 circle_center = sphere_center + plane_offset * circle_normal;
 
 %make 2 orthogonal basis vectors (u & v) for circle plane
@@ -196,7 +197,7 @@ legend('Location', 'northeast');
 %animation loop
 for i = 1:num_points
     %plot robot at current config
-    robot.plot(q_trajectory(i,:), 'workspace', [sphere_center(1)-0.6, sphere_center(1)+0.6, sphere_center(2)-0.6, sphere_center(2)+0.6, 0, sphere_center(3)+0.6], 'trail', 'b-', 'nobase');
+    robot.plot(q_trajectory(i,:), 'workspace', [sphere_center(1)-1, sphere_center(1)+1, sphere_center(2)-1, sphere_center(2)+1, 0, sphere_center(3)+1], 'trail', 'b-', 'nobase');
 
     %update trace line
     set(trace_line, 'XData', positions(1, 1:i), 'YData', positions(2,1:i), 'ZData', positions(3,1:i));
